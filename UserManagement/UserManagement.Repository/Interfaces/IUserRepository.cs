@@ -5,5 +5,16 @@ namespace UserManagement.Repository.Interfaces;
 
 public interface IUserRepository
 {
-    IQueryable<UserModel> GetUsers(Expression<Func<UserModel, bool>> filter);
+    /// <summary>
+    /// Returns a users based on a query
+    /// </summary>
+    /// <param name="filter">An expression that filters the users to return.</param>
+    IQueryable<UserModel> GetUsers(Expression<Func<UserModel, bool>>? filter);
+    
+    /// <summary>
+    /// Find a user by a filter
+    /// </summary>
+    /// <param name="filter">Filter to apply to the users set</param>
+    /// <returns></returns>
+    UserModel? GetUser(Expression<Func<UserModel, bool>> filter);
 }

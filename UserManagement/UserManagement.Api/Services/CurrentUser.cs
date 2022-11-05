@@ -15,12 +15,12 @@ public class CurrentUser
     
     public CurrentUser(IPermissionRepository userRepository)
     {
-        var currentUser = userRepository.GetUserPermissionDetails(Guid.Empty);
-        Id = currentUser.UserId;
-        Firstname = currentUser.Firstname;
-        Lastname = currentUser.Lastname;
-        Email = currentUser.Email;
-        UserIdentifier = currentUser.UserIdentifier;
-        Permissions = currentUser.Permissions;
+        // var currentUser = userRepository.GetUserPermissionDetails(Guid.Empty);
+        // Id = currentUser.UserId;
+        // Firstname = currentUser.Firstname;
+        // Lastname = currentUser.Lastname;
+        // Email = currentUser.Email;
+        // UserIdentifier = currentUser.UserIdentifier;
+        // Permissions = currentUser.Permissions;
     }
 }

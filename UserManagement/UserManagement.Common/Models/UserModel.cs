@@ -16,4 +16,6 @@ public class UserModel: BaseUserManagementModel
     public string UserIdentifier { get; set; }
 
     public virtual IList<UserGroupModel> UserGroups { get; set; }
+
+    public string FullName => $"{Name} {Lastname}";
 }
