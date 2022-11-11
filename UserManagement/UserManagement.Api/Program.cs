@@ -2,7 +2,7 @@ using System.Reflection;
 using Microsoft.OpenApi.Models;
 using UserManagement.Api.Extensions;
 using UserManagement.Api.Services;
-using UserManagement.ControllerServices;
+using UserManagement.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,7 +28,7 @@ builder.Services.AddSwaggerGen(options =>
 
 builder.Services.AddScoped<CurrentUser>();
 
-builder.Services.AddControllerServices(builder.Configuration);
+builder.Services.AddUserManagementServices(builder.Configuration);
 
 
 var app = builder.Build();

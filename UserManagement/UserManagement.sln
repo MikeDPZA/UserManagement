@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserManagement.ControllerServices", "UserManagement.ControllerServices\UserManagement.ControllerServices.csproj", "{73313A91-DEAC-4C54-98CA-D0E11524668B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserManagement.Services", "UserManagement.Services\UserManagement.Services.csproj", "{73313A91-DEAC-4C54-98CA-D0E11524668B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserManagement.Api", "UserManagement.Api\UserManagement.Api.csproj", "{2738C974-03ED-4CA1-88A2-AA9C3DA7BC09}"
 EndProject
