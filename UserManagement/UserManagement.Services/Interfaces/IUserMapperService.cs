@@ -16,4 +16,9 @@ public interface IUserMapperService
     /// It maps a UserModel to a User
     /// </summary>
     Expression<Func<UserModel, User>> MapToUserDto();
+
+    /// <summary>
+    /// It maps a UserModel to a User
+    /// </summary>
+    User MapToUserDto(UserModel user);
 }

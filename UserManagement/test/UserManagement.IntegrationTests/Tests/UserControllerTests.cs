@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Newtonsoft.Json;
+using UserManagement.Api;
 using UserManagement.Common.Dto.User;
 using UserManagement.Common.Generic;
 using UserManagement.IntegrationTests.Extensions;
@@ -13,12 +14,12 @@ using Xunit;
 
 namespace UserManagement.IntegrationTests.Tests;
 
-public class UserControllerTests : IClassFixture<IntegrationTestApplicationFactory<Program>>
+public class UserControllerTests : IClassFixture<IntegrationTestApplicationFactory<Startup>>
 {
-    private readonly WebApplicationFactory<Program> _factory;
+    private readonly WebApplicationFactory<Startup> _factory;
     private readonly HttpClient _client;
 
-    public UserControllerTests(IntegrationTestApplicationFactory<Program> factory)
+    public UserControllerTests(IntegrationTestApplicationFactory<Startup> factory)
     {
         _factory = factory;
         _client = _factory.CreateClient();

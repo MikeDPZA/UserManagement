@@ -32,7 +32,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\UserManagement.Api\UserManagement.Api.csproj" />
+      <ProjectReference Include="..\..\UserManagement.Api\src\UserManagement.Api\UserManagement.Api.csproj" />
     </ItemGroup>
 
 </Project>

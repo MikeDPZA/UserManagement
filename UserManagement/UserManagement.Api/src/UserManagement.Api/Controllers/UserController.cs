@@ -11,7 +11,7 @@ namespace UserManagement.Api.Controllers;
 /// Controller for user actions
 /// </summary>
 [ApiController]
-[Route("api/v1/Users")]
+[Route("api/UserManagement/v1/Users")]
 public class UserController: BaseController
 {
     private IUserControllerService _userControllerService;
@@ -53,7 +53,7 @@ public class UserController: BaseController
     /// A list of users.
     /// </returns>
     [ProducesResponseType(typeof(PagedResponse<User>), (int)HttpStatusCode.OK)]
-    [HttpPost("Filter")]
+    [HttpPost("Advanced")]
     public IActionResult GetUsers([FromBody]UserFilterDto filter, [FromQuery] int pageNum = 1, [FromQuery]int pageSize = 10)
     {
         var result = _userControllerService.GetUsers(pageNum, pageSize, filter);

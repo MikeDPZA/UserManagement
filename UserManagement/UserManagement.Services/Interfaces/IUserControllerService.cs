@@ -32,4 +32,10 @@ public interface IUserControllerService
     /// <param name="ascending">Direction to order by</param>
     PagedResponse<User> GetUsers(int pageNum, int pageSize, UserFilterDto filter,
         Expression<Func<User, object>> orderBy, bool ascending = true);
+
+    /// <summary>
+    /// Get user by Id
+    /// </summary>
+    /// <param name="userId">The user's id</param>
+    User GetUser(Guid userId);
 }

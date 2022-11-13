@@ -13,6 +13,9 @@ public class UserMapperService : IUserMapperService
     {
         var builder = PredicateBuilder.New<UserModel>(true);
 
+        if (filter == null)
+            return builder;
+        
         if (!string.IsNullOrEmpty(filter.Email))
         {
             filter.Email = filter.Email.ToLower();
@@ -60,4 +63,17 @@ public class UserMapperService : IUserMapperService
                     Id = _.Id,
                     UserIdentifier = _.UserIdentifier
                 };
+
+    /// <inheritdoc />
+    public User MapToUserDto(UserModel user)
+    {
+        return new User()
+        {
+            Id = user.Id,
+            Email = user.Email,
+            Firstname = user.Name,
+            Lastname = user.Lastname,
+            UserIdentifier = user.UserIdentifier
+        };
+    }
 }
