@@ -1,6 +1,7 @@
-﻿using UserManagement.Api.Middleware;
+﻿using Microsoft.AspNetCore.Builder;
+using UserManagement.Services.Middleware;
 
-namespace UserManagement.Api.Extensions;
+namespace UserManagement.Services.Extensions;
 
 public static class PermissionMiddlewareExtension
 {

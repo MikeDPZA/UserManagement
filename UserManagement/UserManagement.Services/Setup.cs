@@ -7,9 +7,12 @@ using Microsoft.IdentityModel.Tokens;
 using UserManagement.Common.Dto.AppSettings;
 using UserManagement.Repository;
 using UserManagement.Services.ControllerServices;
+using UserManagement.Services.EventHandlers.JWT;
+using UserManagement.Services.FacadeServices;
 using UserManagement.Services.IdentityServices;
 using UserManagement.Services.Interfaces;
 using UserManagement.Services.MapperServices;
+using UserManagement.Services.Services;
 
 namespace UserManagement.Services;
 
@@ -18,6 +21,10 @@ public static class Setup
     public static IServiceCollection AddUserManagementServices(this IServiceCollection services,
         IConfiguration configuration)
     {
+        services.AddHttpContextAccessor();
+        services.AddScoped<ITokenService, TokenService>();
+        services.AddScoped<ICurrentUser, CurrentUser>();
+
         services.AddRepository(configuration);
         services.AddMappers();
         services.AddControllerServices();
@@ -27,10 +34,8 @@ public static class Setup
 
     private static IServiceCollection AddCognito(this IServiceCollection services, IConfiguration configuration)
     {
-        
         var awsConfig = configuration.GetSection("Aws").Get<AwsAppSettings>();
         services.Configure<AwsAppSettings>(configuration.GetSection("Aws"));
-
         services.AddCognitoIdentity();
 
         services.AddAuthentication(options =>
@@ -50,14 +55,31 @@ public static class Setup
                     LifetimeValidator = (before, expires, token, param) => expires > DateTime.UtcNow,
                     ValidateAudience = false
                 };
+
+                options.Events = new JwtBearerEvents()
+                {
+                    OnChallenge = OnChallengeEventHandler.Handle,
+                    OnForbidden = OnForbiddenEventHandler.Handle,
+                    OnAuthenticationFailed = OnAuthenticationFailedHandler.Handle,
+                    OnMessageReceived = OnMessageReceivedHandler.Handle,
+                    OnTokenValidated = OnTokenValidatedHandler.Handle
+                };
             });
+
+        services.AddAuthorization(options =>
+        {
+            
+        });
+        
         services.AddScoped<IIdentityService, CognitoIdentityService>();
+
         return services;
     }
 
     private static IServiceCollection AddControllerServices(this IServiceCollection services)
     {
         services.AddScoped<IUserControllerService, UserControllerService>();
+        services.AddScoped<IOAuthFacade, OAuthFacade>();
         return services;
     }
 

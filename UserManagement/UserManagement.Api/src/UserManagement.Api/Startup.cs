@@ -1,6 +1,5 @@
-﻿using UserManagement.Api.Extensions;
-using UserManagement.Api.Services;
-using UserManagement.Services;
+﻿using UserManagement.Services;
+using UserManagement.Services.Extensions;
 
 namespace UserManagement.Api;
 
@@ -20,7 +19,6 @@ public class Startup
         services.AddControllers();
 
         services.AddUserManagementServices(Configuration);
-        services.AddScoped<CurrentUser>();
     }
 
     /// This method gets called by the runtime. Use this method to configure the HTTP request pipeline
@@ -37,17 +35,12 @@ public class Startup
 
         app.UseAuthentication();
         app.UseAuthorization();;
-        
         app.UsePermissionMiddleware();
 
         app.UseEndpoints(endpoints =>
         {
             endpoints.MapControllers();
-            endpoints.MapGet("/",
-                async context =>
-                {
-                    await context.Response.WriteAsync("Welcome to running ASP.NET Core on AWS Lambda");
-                });
         });
+
     }
 }

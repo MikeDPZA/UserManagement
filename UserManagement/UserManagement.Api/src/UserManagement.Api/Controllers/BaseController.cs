@@ -1,22 +1,23 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using UserManagement.Api.Services;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using UserManagement.Services.Services;
 
 namespace UserManagement.Api.Controllers;
 
 /// <summary>
 /// Base Controller all controllers should inherit from
 /// </summary>
-// [Authorize("Token")]
+[Authorize]
 [Produces("application/json")]
 public abstract class BaseController: ControllerBase
 {
-    protected CurrentUser CurrentUser;
+    protected ICurrentUser CurrentUser;
     
     /// <summary>
     /// Default constructor for base controller
     /// </summary>
     /// <param name="currentUser"></param>
-    public BaseController(CurrentUser currentUser)
+    public BaseController(ICurrentUser currentUser)
     {
         CurrentUser = currentUser;
     }

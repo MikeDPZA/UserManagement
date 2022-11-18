@@ -1,4 +1,5 @@
-﻿using UserManagement.Common.Dto;
+﻿using Microsoft.EntityFrameworkCore;
+using UserManagement.Common.Dto;
 using UserManagement.Common.Exceptions;
 using UserManagement.Repository.Context;
 using UserManagement.Repository.Interfaces;
@@ -13,7 +14,15 @@ public class PermissionRepository : BaseRepository<UserManagementContext>, IPerm
 
     public UserPermissionDetailsDto GetUserPermissionDetails(Guid userId)
     {
-        var user = Ctx.Users.FirstOrDefault(_ => _.Id == userId && !_.IsDeleted);
+        var user = Ctx.Users
+            .Include(_ => _.UserGroups)
+            .ThenInclude(_ => _.Group)
+            .ThenInclude(_ => _.RoleGroups)
+            .ThenInclude(_ => _.Role)
+            .ThenInclude(_ => _.RolePermissions)
+            .ThenInclude(_ => _.Permission)
+            .FirstOrDefault(_ => _.Id == userId && !_.IsDeleted);
+        
         if (user == null)
             throw new UserNotExistException($"User with id: {userId} does not exist");
 

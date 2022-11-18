@@ -1,9 +1,10 @@
 ﻿using System.Net;
 using Microsoft.AspNetCore.Mvc;
-using UserManagement.Api.Services;
 using UserManagement.Common.Dto.User;
 using UserManagement.Common.Generic;
+using UserManagement.Services.Attributes;
 using UserManagement.Services.Interfaces;
+using UserManagement.Services.Services;
 
 namespace UserManagement.Api.Controllers;
 
@@ -14,7 +15,7 @@ namespace UserManagement.Api.Controllers;
 [Route("api/UserManagement/v1/Users")]
 public class UserController: BaseController
 {
-    private IUserControllerService _userControllerService;
+    private readonly IUserControllerService _userControllerService;
 
 
     /// <summary>
@@ -22,7 +23,7 @@ public class UserController: BaseController
     /// </summary>
     /// <param name="currentUser"></param>
     /// <param name="userControllerService"></param>
-    public UserController(CurrentUser currentUser, IUserControllerService userControllerService) : base(currentUser)
+    public UserController(ICurrentUser currentUser, IUserControllerService userControllerService) : base(currentUser)
     {
         _userControllerService = userControllerService;
     }

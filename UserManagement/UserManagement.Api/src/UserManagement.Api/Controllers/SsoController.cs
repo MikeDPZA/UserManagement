@@ -4,9 +4,9 @@ using System.Net.Mime;
 using System.Text;
 using System.Text.Json;
 using System.Web;
+using Amazon.Lambda.Core;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using UserManagement.Api.Services;
 using UserManagement.Common.Dto.AppSettings;
 using UserManagement.Common.Dto.Cognito;
 using UserManagement.Common.Dto.Token;
@@ -20,25 +20,27 @@ namespace UserManagement.Api.Controllers;
 /// </summary>
 [ApiController]
 [Route("api/UserManagement/v1/SSO")]
-public class SsoController: BaseController
+public class SsoController : ControllerBase
 {
     private readonly IIdentityService _identityService;
     private ILogger<SsoController> _logger;
     private readonly AwsAppSettings _awsSettings;
     private readonly IUserControllerService _userControllerService;
+    private readonly IOAuthFacade _oAuthFacade;
 
-    
+
     /* This is the constructor for the SsoController class. It is initializing the class variables. */
-    public SsoController(CurrentUser currentUser,
-        IIdentityService identityService, 
-        ILogger<SsoController> logger, 
-        IOptions<AwsAppSettings> awsSettings, 
-        IUserControllerService userControllerService
-    ) : base(currentUser)
+    public SsoController(IIdentityService identityService,
+        ILogger<SsoController> logger,
+        IOptions<AwsAppSettings> awsSettings,
+        IUserControllerService userControllerService,
+        IOAuthFacade oAuthFacade
+    )
     {
         _identityService = identityService;
         _logger = logger;
         _userControllerService = userControllerService;
+        _oAuthFacade = oAuthFacade;
         _awsSettings = awsSettings.Value;
     }
 
@@ -63,8 +65,8 @@ public class SsoController: BaseController
             return BadRequest(e.Message);
         }
     }
-    
-    
+
+
     /// <summary>
     /// Register a user in the Identity Provider
     /// </summary>
@@ -90,35 +92,29 @@ public class SsoController: BaseController
     [HttpGet("Login")]
     public async Task<IActionResult> Login([FromQuery] string code)
     {
-        var client = new HttpClient();
-        var form = new Dictionary<string, string>
+        try
         {
-            { "grant_type", "authorization_code" },
-            { "client_id", _awsSettings.AppClientId },
-            { "client_secret", _awsSettings.AppClientSecret },
-            { "redirect_uri", _awsSettings.RedirectUrl },
-            { "code", code },
-        };
-        
-        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.UTF8.GetBytes($"{_awsSettings.AppClientId}:{_awsSettings.AppClientSecret}")));
-        var result = await client.PostAsync($"https://{_awsSettings.Domain}/oauth2/token", new FormUrlEncodedContent(form));
+            var oAuthResult = await _oAuthFacade.GetUserToken(
+                code,
+                _awsSettings.AppClientId,
+                _awsSettings.AppClientSecret,
+                _awsSettings.Domain,
+                _awsSettings.RedirectUrl
+            );
 
-        var content = await result.Content.ReadAsStringAsync();
-        
-        if (!result.IsSuccessStatusCode)
-        {
-            return BadRequest(JsonSerializer.Deserialize<object>(content));
+            var jwt = new JwtSecurityToken(oAuthResult.AccessToken);
+            var user = _userControllerService.GetUser(Guid.Parse(jwt.Subject));
+
+            return RedirectAfterAuth(user, oAuthResult);
         }
-
-        var token = JsonSerializer.Deserialize<OAuthTokenResponse>(content);
-        var jwt = new JwtSecurityToken(token.AccessToken);
-
-        var user = _userControllerService.GetUser(Guid.Parse(jwt.Subject));
-
-        return RedirectAfterAuth(user, token);
+        catch (Exception e)
+        {
+            LambdaLogger.Log($"Failed Login: {e}");
+            return BadRequest(e);
+        }
     }
 
-    private IActionResult RedirectAfterAuth(User user, OAuthTokenResponse token )
+    private IActionResult RedirectAfterAuth(User user, OAuthTokenResponse token)
     {
         var returnUrl = new Uri(_awsSettings.RedirectUrl.Replace("api/UserManagement/v1/SSO/Login", ""));
         var writer = new StreamWriter(Response.Body);
