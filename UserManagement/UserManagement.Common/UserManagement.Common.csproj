@@ -17,6 +17,11 @@
 
     <ItemGroup>
       <PackageReference Include="AWSSDK.CognitoIdentityProvider" Version="3.7.101.15" />
+      <PackageReference Include="LinqKit.Core" Version="1.2.3" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Interfaces" />
     </ItemGroup>
 
 </Project>

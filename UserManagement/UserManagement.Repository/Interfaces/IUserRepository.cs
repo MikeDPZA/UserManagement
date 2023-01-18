@@ -17,4 +17,11 @@ public interface IUserRepository
     /// <param name="filter">Filter to apply to the users set</param>
     /// <returns></returns>
     UserModel? GetUser(Expression<Func<UserModel, bool>> filter);
+    
+    /// <summary>
+    /// Find a user by a filter
+    /// </summary>
+    /// <param name="filter">Filter to apply to the users set</param>
+    /// <returns></returns>
+    Task<UserModel?> GetUserAsync(Expression<Func<UserModel, bool>> filter);
 }

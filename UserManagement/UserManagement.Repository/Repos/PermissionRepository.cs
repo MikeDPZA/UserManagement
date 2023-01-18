@@ -1,12 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using UserManagement.Common.Dto;
 using UserManagement.Common.Exceptions;
+using UserManagement.Common.Models;
 using UserManagement.Repository.Context;
 using UserManagement.Repository.Interfaces;
 
 namespace UserManagement.Repository.Repos;
 
-public class PermissionRepository : BaseRepository<UserManagementContext>, IPermissionRepository
+public class PermissionRepository : BaseRepository<PermissionModel>, IPermissionRepository
 {
     public PermissionRepository(UserManagementContext ctx) : base(ctx)
     {

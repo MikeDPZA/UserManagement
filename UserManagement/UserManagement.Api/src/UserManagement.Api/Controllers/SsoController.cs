@@ -103,7 +103,7 @@ public class SsoController : ControllerBase
             );
 
             var jwt = new JwtSecurityToken(oAuthResult.AccessToken);
-            var user = _userControllerService.GetUser(Guid.Parse(jwt.Subject));
+            var user = await _userControllerService.GetUser(Guid.Parse(jwt.Subject));
 
             return RedirectAfterAuth(user, oAuthResult);
         }
@@ -112,6 +112,13 @@ public class SsoController : ControllerBase
             LambdaLogger.Log($"Failed Login: {e}");
             return BadRequest(e);
         }
+    }
+
+    [HttpGet("Logout")]
+    public async Task<IActionResult> Logout()
+    {
+        await _identityService.Logout();
+        return Ok();
     }
 
     private IActionResult RedirectAfterAuth(User user, OAuthTokenResponse token)

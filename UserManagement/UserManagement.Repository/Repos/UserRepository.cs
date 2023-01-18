@@ -5,13 +5,16 @@ using UserManagement.Repository.Interfaces;
 
 namespace UserManagement.Repository.Repos;
 
-public class UserRepository: BaseRepository<UserManagementContext>, IUserRepository
+public class UserRepository: BaseRepository<UserModel>, IUserRepository
 {
     public UserRepository(UserManagementContext ctx) : base(ctx) { }
 
     public IQueryable<UserModel> GetUsers(Expression<Func<UserModel, bool>>? filter)
-        => FindMany(filter);
+        => GetQueryable(filter);
 
     public UserModel? GetUser(Expression<Func<UserModel, bool>> filter)
-        => Find(filter);
+        => Get(filter);
+
+    public Task<UserModel?> GetUserAsync(Expression<Func<UserModel, bool>> filter)
+        => GetAsync(filter);
 }

@@ -29,13 +29,12 @@ public interface IUserControllerService
     /// <param name="pageSize">The number of items to return per page.</param>
     /// <param name="filter">This is the filter expression that will be used to filter the results.</param>
     /// <param name="orderBy">The property to order the results by.</param>
-    /// <param name="ascending">Direction to order by</param>
     PagedResponse<User> GetUsers(int pageNum, int pageSize, UserFilterDto filter,
-        Expression<Func<User, object>> orderBy, bool ascending = true);
+        Expression<Func<User, object>> orderBy);
 
     /// <summary>
     /// Get user by Id
     /// </summary>
     /// <param name="userId">The user's id</param>
-    User GetUser(Guid userId);
+    Task<User> GetUser(Guid userId);
 }

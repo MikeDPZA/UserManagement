@@ -11,6 +11,9 @@ namespace UserManagement.Api.Controllers;
 [Produces("application/json")]
 public abstract class BaseController: ControllerBase
 {
+    /// <summary>
+    /// Current user being used
+    /// </summary>
     protected ICurrentUser CurrentUser;
     
     /// <summary>

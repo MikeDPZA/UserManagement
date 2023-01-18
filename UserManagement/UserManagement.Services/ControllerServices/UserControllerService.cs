@@ -28,26 +28,25 @@ public class UserControllerService: IUserControllerService
     /// <inheritdoc/>
     public PagedResponse<User> GetUsers(int pageNum, int pageSize, UserFilterDto filter)
     {
-        return GetUsers(pageNum, pageSize, filter, _ => _.Firstname);
+        return GetUsers(pageNum, pageSize, filter, User.SortMap.TryGetValue(filter.SortKey, out var orderExp) ? orderExp : _ => _.Firstname);
     }
 
     /// <inheritdoc/>
-    public PagedResponse<User> GetUsers(int pageNum, int pageSize, UserFilterDto filter, Expression<Func<User, object>> orderBy, bool ascending = true)
+    public PagedResponse<User> GetUsers(int pageNum, int pageSize, UserFilterDto filter, Expression<Func<User, object>> orderBy)
     {
-        
         var users = _userRepository
             .GetUsers(_userMapper.MapToFilterExpression(filter) ?? (_ => true))
             .Select(_userMapper.MapToUserDto());
         
-        users = ascending 
+        users = filter?.SortAscending ?? true 
             ? users.OrderBy(orderBy)
             : users.OrderByDescending(orderBy);
         return new PagedResponse<User>(users, pageNum, pageSize);
     }
 
-    public User GetUser(Guid userId)
+    public async Task<User> GetUser(Guid userId)
     {
-        var user = _userRepository.GetUser(_ => _.Id == userId);
+        var user = await _userRepository.GetUserAsync(_ => _.Id == userId);
         return user == null ? new User() : _userMapper.MapToUserDto(user);
     }
 }

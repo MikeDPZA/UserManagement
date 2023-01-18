@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using UserManagement.Common.Dto.User;
 using UserManagement.Common.Generic;
-using UserManagement.Services.Attributes;
 using UserManagement.Services.Interfaces;
 using UserManagement.Services.Services;
 
@@ -48,16 +47,14 @@ public class UserController: BaseController
     /// Get a list of users from the Database
     /// </summary>
     /// <param name="filter">The filter to apply to the data set</param>
-    /// <param name="pageNum">The page number to return.</param>
-    /// <param name="pageSize">The number of items to return per page.</param>
     /// <returns>
     /// A list of users.
     /// </returns>
     [ProducesResponseType(typeof(PagedResponse<User>), (int)HttpStatusCode.OK)]
     [HttpPost("Advanced")]
-    public IActionResult GetUsers([FromBody]UserFilterDto filter, [FromQuery] int pageNum = 1, [FromQuery]int pageSize = 10)
+    public IActionResult GetUsers([FromBody]UserFilterDto filter)
     {
-        var result = _userControllerService.GetUsers(pageNum, pageSize, filter);
+        var result = _userControllerService.GetUsers(filter.PageNum, filter.PageSize, filter);
         return Ok(result);
     }
 }
