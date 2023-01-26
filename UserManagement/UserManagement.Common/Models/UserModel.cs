@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.CodeAnalysis;
 
@@ -15,7 +16,8 @@ public class UserModel: BaseUserManagementModel
 
     public string UserIdentifier { get; set; }
 
-    public virtual IList<UserGroupModel> UserGroups { get; set; }
+    public virtual IList<UserGroupModel> UserGroups { get; set; } = new List<UserGroupModel>();
 
     public string FullName => $"{Name} {Lastname}";
+
 }

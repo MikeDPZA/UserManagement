@@ -11,10 +11,10 @@ public static class Setup
 {
     public static IServiceCollection AddRepository(this IServiceCollection services, IConfiguration configuration)
     {
-        var connectionString = configuration.GetConnectionString("UserManagement");
-        return services
-            .AddDbContext<UserManagementContext>(_ => _.UseNpgsql(connectionString))
-            .AddDependencies();
+        var connectionString = configuration.GetConnectionString("UserManagement");    
+        services.AddDbContext<UserManagementContext>(_ => _.UseNpgsql(connectionString).UseLazyLoadingProxies());
+        services.AddDependencies();
+        return services;
     }
 
     private static IServiceCollection AddDependencies(this IServiceCollection services)

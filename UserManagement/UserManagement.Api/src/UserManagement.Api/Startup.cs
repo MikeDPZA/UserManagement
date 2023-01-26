@@ -1,4 +1,5 @@
-﻿using UserManagement.Services;
+﻿using UserManagement.GraphQL;
+using UserManagement.Services;
 using UserManagement.Services.Extensions;
 
 namespace UserManagement.Api;
@@ -19,6 +20,7 @@ public class Startup
         services.AddControllers();
 
         services.AddUserManagementServices(Configuration);
+        services.AddUserManagementGraph();
     }
 
     /// This method gets called by the runtime. Use this method to configure the HTTP request pipeline
@@ -35,11 +37,12 @@ public class Startup
 
         app.UseAuthentication();
         app.UseAuthorization();;
-        app.UsePermissionMiddleware();
+        // app.UsePermissionMiddleware();
 
         app.UseEndpoints(endpoints =>
         {
             endpoints.MapControllers();
+            endpoints.UseUserManagementGraph();
         });
 
     }

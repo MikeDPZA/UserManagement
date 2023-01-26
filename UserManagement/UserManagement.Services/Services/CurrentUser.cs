@@ -16,15 +16,15 @@ public class CurrentUser: ICurrentUser
     
     public CurrentUser(IPermissionRepository userRepository, ITokenService tokenService)
     {
-        var user = tokenService.GetTokenSubject();
-        
-        var currentUser = userRepository.GetUserPermissionDetails(user);
-        Id = currentUser.UserId;
-        Firstname = currentUser.Firstname;
-        Lastname = currentUser.Lastname;
-        Email = currentUser.Email;
-        UserIdentifier = currentUser.UserIdentifier;
-        Permissions = currentUser.Permissions;
+        // var user = tokenService.GetTokenSubject();
+        //
+        // var currentUser = userRepository.GetUserPermissionDetails(user);
+        // Id = currentUser.UserId;
+        // Firstname = currentUser.Firstname;
+        // Lastname = currentUser.Lastname;
+        // Email = currentUser.Email;
+        // UserIdentifier = currentUser.UserIdentifier;
+        // Permissions = currentUser.Permissions;
     }
 }
 

@@ -5,5 +5,5 @@ namespace UserManagement.Repository.Interfaces;
 
 public interface IRoleRepository
 {
-    
+    IQueryable<RoleModel> GetRoles(Expression<Func<RoleModel, bool>> filter = null);
 }

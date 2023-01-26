@@ -23,5 +23,5 @@ public class UserManagementContext: DbContext
     public virtual DbSet<RoleGroupModel> RoleGroups { get; set; }
     public virtual DbSet<RoleModel> Roles { get; set; }
     public virtual DbSet<RolePermissionModel> RolePermissions { get; set; }
-    public virtual DbSet<PermissionModel> PermissionModels { get; set; }
+    public virtual DbSet<PermissionModel> Permissions { get; set; }
 }
