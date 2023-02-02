@@ -8,7 +8,7 @@ public class SortKeyValidationAttribute: ValidationAttribute
 {
     private readonly string[] _validKeys;
 
-    public SortKeyValidationAttribute(params string[] validKeys): base(() => $"Sort Key must be one of the following {string.Join(" ,", validKeys)}")
+    public SortKeyValidationAttribute(params string[] validKeys): base(() => $"Sort Key must be one of the following {string.Join(", ", validKeys)}")
     {
         _validKeys = validKeys;
     }

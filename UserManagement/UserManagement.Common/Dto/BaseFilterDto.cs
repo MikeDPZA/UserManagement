@@ -14,7 +14,8 @@ public abstract class BaseFilterDto<T> where T: class
     [Range(1, 100)]
     [JsonPropertyName("pageSize")]public int PageSize { get; set; } = 10;
 
-    [JsonPropertyName("sortKey")]public bool SortAscending { get; set; }
+    [JsonPropertyName("sortAscending")]public bool SortAscending { get; set; }
 
+    [JsonPropertyName("sortKey")]
     public abstract string SortKey { get; set; }
 }

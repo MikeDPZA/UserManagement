@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using UserManagement.Common.Dto.User;
 using UserManagement.Common.Generic;
+using UserManagement.Services.Attributes;
 using UserManagement.Services.Interfaces;
 using UserManagement.Services.Services;
 
@@ -51,10 +52,23 @@ public class UserController: BaseController
     /// A list of users.
     /// </returns>
     [ProducesResponseType(typeof(PagedResponse<User>), (int)HttpStatusCode.OK)]
-    [HttpPost("Advanced")]
+    [HttpPost("Search")]
     public IActionResult GetUsers([FromBody]UserFilterDto filter)
     {
         var result = _userControllerService.GetUsers(filter.PageNum, filter.PageSize, filter);
+        return Ok(result);
+    }
+
+    /// <summary>
+    /// Get a user by Id
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    [ProducesResponseType(typeof(User), (int)HttpStatusCode.OK)]
+    [HttpGet("{id:guid}")]
+    public async Task<IActionResult> GetUser([FromRoute] Guid id)
+    {
+        var result = await _userControllerService.GetUser(id);
         return Ok(result);
     }
 }

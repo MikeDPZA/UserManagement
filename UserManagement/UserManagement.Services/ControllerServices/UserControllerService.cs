@@ -2,6 +2,7 @@
 using UserManagement.Common.Dto.User;
 using UserManagement.Common.Generic;
 using UserManagement.Repository.Interfaces;
+using UserManagement.Services.Extensions;
 using UserManagement.Services.Interfaces;
 
 namespace UserManagement.Services.ControllerServices;
@@ -10,13 +11,11 @@ public class UserControllerService: IUserControllerService
 {
     private readonly IUserRepository _userRepository;
     private readonly IUserMapperService _userMapper;
-    private readonly IIdentityService _identityService;
 
-    public UserControllerService(IUserRepository userRepository, IUserMapperService userMapper, IIdentityService identityService)
+    public UserControllerService(IUserRepository userRepository, IUserMapperService userMapper)
     {
         _userRepository = userRepository;
         _userMapper = userMapper;
-        _identityService = identityService;
     }
 
     /// <inheritdoc/>
@@ -26,21 +25,20 @@ public class UserControllerService: IUserControllerService
     }
 
     /// <inheritdoc/>
-    public PagedResponse<User> GetUsers(int pageNum, int pageSize, UserFilterDto filter)
+    public PagedResponse<User> GetUsers(int pageNum, int pageSize, UserFilterDto? filter)
     {
-        return GetUsers(pageNum, pageSize, filter, User.SortMap.TryGetValue(filter.SortKey, out var orderExp) ? orderExp : _ => _.Firstname);
+        return GetUsers(pageNum, pageSize, filter, User.SortMap.TryGetValue(filter?.SortKey ?? "", out var orderExp) ? orderExp : _ => _.Firstname);
     }
 
     /// <inheritdoc/>
-    public PagedResponse<User> GetUsers(int pageNum, int pageSize, UserFilterDto filter, Expression<Func<User, object>> orderBy)
+    public PagedResponse<User> GetUsers(int pageNum, int pageSize, UserFilterDto? filter, Expression<Func<User, object>> orderBy)
     {
+        filter ??= new UserFilterDto();
         var users = _userRepository
             .GetUsers(_userMapper.MapToFilterExpression(filter) ?? (_ => true))
-            .Select(_userMapper.MapToUserDto());
+            .Select(_userMapper.MapToUserDto())
+            .OrderByDirection(orderBy, filter.SortAscending);
         
-        users = filter?.SortAscending ?? true 
-            ? users.OrderBy(orderBy)
-            : users.OrderByDescending(orderBy);
         return new PagedResponse<User>(users, pageNum, pageSize);
     }
 

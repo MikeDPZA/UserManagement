@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore;
 using UserManagement.Common.Dto;
 using UserManagement.Common.Exceptions;
 using UserManagement.Common.Models;
@@ -44,4 +45,7 @@ public class PermissionRepository : BaseRepository<PermissionModel>, IPermission
             UserIdentifier = user.UserIdentifier
         };
     }
+
+    public IQueryable<PermissionModel> GetPermissions(Expression<Func<PermissionModel, bool>> filter = null)
+        => GetQueryable(filter);
 }

@@ -28,6 +28,7 @@ public static class Setup
         services.AddRepository(configuration);
         services.AddMappers();
         services.AddControllerServices();
+        services.AddFacadeServices();
         services.AddCognito(configuration);
         return services;
     }
@@ -79,13 +80,21 @@ public static class Setup
     private static IServiceCollection AddControllerServices(this IServiceCollection services)
     {
         services.AddScoped<IUserControllerService, UserControllerService>();
+        services.AddScoped<IPermissionControllerService, PermissionControllerService>();
+        return services;
+    }
+
+    private static IServiceCollection AddFacadeServices(this IServiceCollection services)
+    {
         services.AddScoped<IOAuthFacade, OAuthFacade>();
+
         return services;
     }
 
     private static IServiceCollection AddMappers(this IServiceCollection services)
     {
         services.AddScoped<IUserMapperService, UserMapperService>();
+        services.AddScoped<IPermissionMapperService, PermissionMapperService>();
         return services;
     }
 }

@@ -1,6 +1,8 @@
 ﻿using System.Net;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Text;
+using System.Text.Json;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
@@ -33,6 +35,7 @@ public class PermissionMiddleware
         if (attribute != null && !currentUser.HasPermission(attribute.Permissions))
         {
             context.Response.StatusCode = (int)HttpStatusCode.Forbidden;
+
             return;
         }
 

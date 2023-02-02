@@ -16,7 +16,6 @@ public class UserFilterDto: BaseFilterDto<UserModel>
 
     [JsonPropertyName("userIdentifier")] public string UserIdentifier { get; set; } = "";
 
-    [JsonPropertyName("sortKey")]
     [SortKeyValidation(User.IdSortKey, User.FirstnameSortKey, User.LastnameSortKey, User.EmailSortKey, User.UserIdentifierSortKey)]
     public override string SortKey { get; set; } = User.FirstnameSortKey;
 }
